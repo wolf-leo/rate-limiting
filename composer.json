@@ -1,5 +1,6 @@
 {
     "name": "wolfcode/rate-limiting",
+    "description": "php rate-limiting",
     "type": "library",
     "require": {
         "php": ">=8.1"
