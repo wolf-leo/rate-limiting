@@ -34,7 +34,7 @@ class Test
 
 
 // 需要自行创建一个 Some 类 并且存在静态方法 getIp
-Class Some
+class Some
 {
     public static function getIp(): string
     {
