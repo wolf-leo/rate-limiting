@@ -82,6 +82,7 @@ class RateLimiting
         $module          = app('http')->getName();
         $appNamespace    = config('app.app_namespace');
         $controllerClass = "app\\{$module}\\controller\\{$controller}{$appNamespace}";
+        $controllerClass = str_replace('.', '\\', $controllerClass);
         $action          = $request->action();
         try {
             Bootstrap::init($controllerClass, $action, [
