@@ -1,18 +1,18 @@
-# PHP限流器
+# PHP rate-limiting
 
-## 1.要求
+## 1. Require
 
 > php >= 8.1
 >
-> Redis 服务
+> Redis
 
-## 2. 安装
+## 2. Install
 
 ```shell
 composer require "wolfcode/rate-limiting"
 ```
 
-# 3. 文档
+## 3. Usage
 
 ```php
 use Wolfcode\RateLimiting\RateLimiting;
@@ -20,20 +20,24 @@ use Wolfcode\RateLimiting\RateLimiting;
 class Test
 {
     // 每1秒只能请求1次
+    // Only one request can be made per second
     #[RateLimiting(key: 'test', seconds: 1, limit: 1, message: '请求过于频繁~')]
     public function index(Request $request): string
     
     // 每60秒只能请求100次
+    // Only 100 requests can be made every 60 seconds
     #[RateLimiting(key: 'test', seconds: 60, limit: 100, message: '你好快啊，我好喜欢~')]
     public function index(Request $request): string
     
     // 每3秒只能请求10次 key可以使用数组回调方式 参考下方例子
+    // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
     #[RateLimiting(key: [Some:class,'getIp'], seconds: 10, limit: 3, message: '我记住你了~')]
     public function index(Request $request): string
 }
 
 
 // 需要自行创建一个 Some 类 并且存在静态方法 getIp
+// Need to create a Some class on your own and have a static method getIp
 class Some
 {
     public static function getIp(): string
@@ -43,15 +47,19 @@ class Some
 }
 ```
 
-# 4.建议
+## 4. Suggestion
 
 > 可以在 .env 文件中设置一个 RATE_LIMITING_STATUS 开关，来控制是否开启限流
 >
 > 建议在中间件中使用
+>
+> You can set a RATE_LIMITING-STATUS switch in the. env file to control whether to enable current limiting
+>
+> Suggest using it in middleware
 
-# 5.示例
+## 5. Example
 
-#### 以下示例在ThinkPHP8.1中使用
+#### ThinkPHP8.1
 
 ```php
 <?php
