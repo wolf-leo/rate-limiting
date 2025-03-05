@@ -33,6 +33,11 @@ class Test
     // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
     #[RateLimitingMiddleware(key: [Some:class,'getIp'], seconds: 10, limit: 3, message: '我记住你了~')]
     public function index(Request $request): string
+    
+    // 每3秒只能请求10次 key可以使用数组回调方式 参考下方例子
+    // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
+    #[RateLimitingMiddleware(key: [Some:class,'customIp'], seconds: 10, limit: 3, message: '我记住你了~'),args:[__METHOD__]
+    public function index(Request $request): string
 }
 
 
@@ -43,6 +48,11 @@ class Some
     public static function getIp(): string
     {
         return $request->ip();
+    }
+    
+    public static function customIp(...$args): string
+    {
+        return $args[0] . $request->ip();
     }
 }
 ```
@@ -96,10 +106,10 @@ class RateLimiting
             Bootstrap::init($controllerClass, $action, [
                 # Redis 相关配置
                 'host'     => env('REDIS_HOST', '127.0.0.1'),
-                'port'     => env('REDIS_PORT, 6379'),
+                'port'     => (int)env('REDIS_PORT', 6379),
                 'password' => env('REDIS_PASSWORD', ''),
                 'prefix'   => env('REDIS_PREFIX', ''),
-                'database' => env('REDIS_DATABASE', 0),
+                'database' => (int)env('REDIS_DATABASE', 0),
             ]);
         }catch (\Throwable $exception) {
             $this->error($exception->getMessage());
