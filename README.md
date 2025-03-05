@@ -15,23 +15,23 @@ composer require "wolfcode/rate-limiting"
 ## 3. Usage
 
 ```php
-use Wolfcode\RateLimiting\RateLimiting;
+use Wolfcode\RateLimiting\Attributes\RateLimitingMiddleware;
 
 class Test
 {
     // 每1秒只能请求1次
     // Only one request can be made per second
-    #[RateLimiting(key: 'test', seconds: 1, limit: 1, message: '请求过于频繁~')]
+    #[RateLimitingMiddleware(key: 'test', seconds: 1, limit: 1, message: '请求过于频繁~')]
     public function index(Request $request): string
     
     // 每60秒只能请求100次
     // Only 100 requests can be made every 60 seconds
-    #[RateLimiting(key: 'test', seconds: 60, limit: 100, message: '你好快啊，我好喜欢~')]
+    #[RateLimitingMiddleware(key: 'test', seconds: 60, limit: 100, message: '你好快啊，我好喜欢~')]
     public function index(Request $request): string
     
     // 每3秒只能请求10次 key可以使用数组回调方式 参考下方例子
     // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
-    #[RateLimiting(key: [Some:class,'getIp'], seconds: 10, limit: 3, message: '我记住你了~')]
+    #[RateLimitingMiddleware(key: [Some:class,'getIp'], seconds: 10, limit: 3, message: '我记住你了~')]
     public function index(Request $request): string
 }
 
