@@ -17,7 +17,7 @@ class Bootstrap
         $reflection             = new \ReflectionClass($controllerClass);
         $methodReflection       = $reflection->getMethod($action);
         $rateLimitingAttributes = $methodReflection->getAttributes(RateLimitingMiddleware::class);
-        $prefix                 = Constant::RATE_KEY_PREFIX;
+        $prefix                 = $options['prefix'] ?? Constant::RATE_KEY_PREFIX;
         try {
             $redis = new RedisHelper($options);
         }catch (\RedisException) {
@@ -27,8 +27,8 @@ class Bootstrap
             $rateLimiting = $rateLimitingAttribute->newInstance();
             $key          = $rateLimiting->key;
             if (empty($key)) throw new RateLimitingException("Parameter key cannot be empty");
-            if (is_array($key)) $key = $key();
-            $key   = $prefix . date('Ymd') . ':' . $key;
+            if (is_array($key)) $key = $key(...$rateLimiting->args);
+            $key   = $prefix . 'RATE-LIMITING' . ':' . $key;
             $count = $redis->incr($key);
             if ($count == 1) {
                 $redis->expire($key, $rateLimiting->seconds);
