@@ -6,5 +6,5 @@ namespace Wolfcode\RateLimiting\Common;
 
 final class Constant
 {
-    const RATE_KEY_PREFIX = 'php-rate-limiting:';
+    const RATE_KEY_PREFIX = 'php-rate-limiting';
 }
