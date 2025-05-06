@@ -31,12 +31,12 @@ class Test
     
     // 每3秒只能请求10次 key可以使用数组回调方式 参考下方例子
     // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
-    #[RateLimitingMiddleware(key: [Some:class,'getIp'], seconds: 3, limit: 10, message: '我记住你了~')]
+    #[RateLimitingMiddleware(key: [Some::class,'getIp'], seconds: 3, limit: 10, message: '我记住你了~')]
     public function index(Request $request): string
     
     // 每3秒只能请求10次 key可以使用数组回调方式 参考下方例子
     // Only 10 key requests can be made every 3 seconds. An array callback method can be used, as shown in the example below
-    #[RateLimitingMiddleware(key: [Some:class,'customIp'], seconds: 3, limit: 10, message: '我记住你了~'),args:[__METHOD__])]
+    #[RateLimitingMiddleware(key: [Some::class,'customIp'], seconds: 3, limit: 10, message: '我记住你了~'),args:[__METHOD__])]
     public function index(Request $request): string
 }
 
@@ -63,7 +63,7 @@ class Some
 >
 > 建议在中间件中使用
 >
-> You can set a RATE_LIMITING-STATUS switch in the. env file to control whether to enable current limiting
+> You can set a RATE_LIMITING-STATUS switch in the .env file to control whether to enable current limiting
 >
 > Suggest using it in middleware
 
