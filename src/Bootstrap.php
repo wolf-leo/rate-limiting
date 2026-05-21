@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace Wolfcode\RateLimiting;
 
+use ReflectionException;
 use Wolfcode\RateLimiting\Attributes\RateLimitingMiddleware;
 use Wolfcode\RateLimiting\Common\Constant;
 use Wolfcode\RateLimiting\Driver\RedisHelper;
@@ -12,7 +13,11 @@ use Wolfcode\RateLimiting\Exception\RateLimitingException;
 class Bootstrap
 {
 
-    public static function init(string $controllerClass, string $action, ?array $options = [])
+    /**
+     * @throws RateLimitingException
+     * @throws ReflectionException
+     */
+    public static function init(string $controllerClass, string $action, ?array $options = []): void
     {
         $reflection             = new \ReflectionClass($controllerClass);
         $methodReflection       = $reflection->getMethod($action);
@@ -30,7 +35,7 @@ class Bootstrap
             if (is_array($key)) $key = $key(...$rateLimiting->args);
             $key   = $prefix . ':' . $key;
             $count = $redis->incr($key);
-            if ($count >= 1) {
+            if ($count == 1) {
                 $redis->expire($key, $rateLimiting->seconds);
             }
             if ($count > $rateLimiting->limit) {
